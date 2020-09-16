@@ -101,7 +101,7 @@ def today_timetable(week_num):
 			]
 		else:
 			today_timetable = rasp_chisl[rasp_chisl.find(DAYS[f'{week_num}'])::]
-		bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
+		return bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
 	else:
 		if week_num != 4:
 			today_timetable = rasp_znam[
@@ -109,7 +109,7 @@ def today_timetable(week_num):
 			]
 		else:
 			today_timetable = rasp_znam[rasp_znam.find(DAYS[f'{week_num}'])::]
-		bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
+		return bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
