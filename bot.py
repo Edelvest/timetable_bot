@@ -93,24 +93,6 @@ rasp_znam = '''=== Знаменатель ===
 def start_message(message):
     bot.send_message(message.chat.id, 'Если что не так, знаешь к кому стучаться', reply_markup=keyboard1)
 
-def today_timetable(week_num):
-	if weekday_count % 2 == 0:
-		if week_num != 4:
-			today_timetable = rasp_chisl[
-				rasp_chisl.find(DAYS[f'{week_num}']):rasp_chisl.find(DAYS[f'{week_num+1}'])
-			]
-		else:
-			today_timetable = rasp_chisl[rasp_chisl.find(DAYS[f'{week_num}'])::]
-		return bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
-	else:
-		if week_num != 4:
-			today_timetable = rasp_znam[
-				rasp_znam.find(DAYS[f'{week_num}']):rasp_znam.find(DAYS[f'{week_num+1}'])
-			]
-		else:
-			today_timetable = rasp_znam[rasp_znam.find(DAYS[f'{week_num}'])::]
-		return bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
-
 @bot.message_handler(content_types=['text'])
 def send_text(message):
 	time = datetime.datetime.now()
@@ -130,10 +112,40 @@ def send_text(message):
 
 	elif message.text == 'Сегодня':
 		week_num = time.weekday()
-		today_timetable(week_num)
+		if weekday_count % 2 == 0:
+			if week_num != 4:
+				today_timetable = rasp_chisl[
+					rasp_chisl.find(DAYS[f'{week_num}']):rasp_chisl.find(DAYS[f'{week_num+1}'])
+				]
+			else:
+				today_timetable = rasp_chisl[rasp_chisl.find(DAYS[f'{week_num}'])::]
+			bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
+		else:
+			if week_num != 4:
+				today_timetable = rasp_znam[
+					rasp_znam.find(DAYS[f'{week_num}']):rasp_znam.find(DAYS[f'{week_num+1}'])
+				]
+			else:
+				today_timetable = rasp_znam[rasp_znam.find(DAYS[f'{week_num}'])::]
+			bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
 
 	elif message.text == 'Завтра':
 		week_num = time.weekday() + 1
-		today_timetable(week_num)
+		if weekday_count % 2 == 0:
+			if week_num != 4:
+				today_timetable = rasp_chisl[
+					rasp_chisl.find(DAYS[f'{week_num}']):rasp_chisl.find(DAYS[f'{week_num+1}'])
+				]
+			else:
+				today_timetable = rasp_chisl[rasp_chisl.find(DAYS[f'{week_num}'])::]
+			bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
+		else:
+			if week_num != 4:
+				today_timetable = rasp_znam[
+					rasp_znam.find(DAYS[f'{week_num}']):rasp_znam.find(DAYS[f'{week_num+1}'])
+				]
+			else:
+				today_timetable = rasp_znam[rasp_znam.find(DAYS[f'{week_num}'])::]
+			bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
 			
 bot.polling()
