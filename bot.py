@@ -128,11 +128,11 @@ def send_text(message):
 	elif message.text == 'Расписание на знаменатель':
 		bot.send_message(message.chat.id, rasp_znam, reply_markup=keyboard1)
 
-	elif message.text == 'Расписание на текущий день':
+	elif message.text == 'Сегодня':
 		week_num = time.weekday()
 		today_timetable(week_num)
 
-	elif message.text == 'Расписание на завтра':
+	elif message.text == 'Завтра':
 		week_num = time.weekday() + 1
 		today_timetable(week_num)
 			
