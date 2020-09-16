@@ -5,7 +5,7 @@ import datetime
 bot = telebot.TeleBot('1358633577:AAFtPrWHwxmRtUZf0fjGSefAfug1qMbE_Pw')
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True)
 keyboard1.row('Расписание на текущую неделю')
-keyboard1.row('Расписание на текущий день')
+keyboard1.row('Cегодня', 'Завтра')
 keyboard1.row('Расписание на числитель')
 keyboard1.row('Расписание на знаменатель')
 start = datetime.datetime(2020, 9, 7)
@@ -93,40 +93,47 @@ rasp_znam = '''=== Знаменатель ===
 def start_message(message):
     bot.send_message(message.chat.id, 'Если что не так, знаешь к кому стучаться', reply_markup=keyboard1)
 
+def today_timetable(week_num):
+	if weekday_count % 2 == 0:
+		if week_num != 4:
+			today_timetable = rasp_chisl[
+				rasp_chisl.find(DAYS[f'{week_num}']):rasp_chisl.find(DAYS[f'{week_num+1}'])
+			]
+		else:
+			today_timetable = rasp_chisl[rasp_chisl.find(DAYS[f'{week_num}'])::]
+		bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
+	else:
+		if week_num != 4:
+			today_timetable = rasp_znam[
+				rasp_znam.find(DAYS[f'{week_num}']):rasp_znam.find(DAYS[f'{week_num+1}'])
+			]
+		else:
+			today_timetable = rasp_znam[rasp_znam.find(DAYS[f'{week_num}'])::]
+		bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
+
 @bot.message_handler(content_types=['text'])
 def send_text(message):
 	time = datetime.datetime.now()
 	delta = time - start
 	weekday_count = delta.days // 7
-	if message.text.lower() == 'расписание на текущую неделю':
+	if message.text == 'Расписание на текущую неделю':
 		if weekday_count % 2 == 0:
-			bot.send_message(message.chat.id, rasp_chisl)
+			bot.send_message(message.chat.id, rasp_chisl, reply_markup=keyboard1)
 		else:
-			bot.send_message(message.chat.id, rasp_znam)
+			bot.send_message(message.chat.id, rasp_znam, reply_markup=keyboard1)
 
-	elif message.text.lower() == 'расписание на числитель':
-		bot.send_message(message.chat.id, rasp_chisl)
+	elif message.text == 'Расписание на числитель':
+		bot.send_message(message.chat.id, rasp_chisl, reply_markup=keyboard1)
 
-	elif message.text.lower() == 'расписание на знаменатель':
-		bot.send_message(message.chat.id, rasp_znam)
+	elif message.text == 'Расписание на знаменатель':
+		bot.send_message(message.chat.id, rasp_znam, reply_markup=keyboard1)
 
-	elif message.text.lower() == 'расписание на текущий день':
+	elif message.text == 'Расписание на текущий день':
 		week_num = time.weekday()
-		if weekday_count % 2 == 0:
-			if week_num != 4:
-				today_timetable = rasp_chisl[
-					rasp_chisl.find(DAYS[f'{week_num}']):rasp_chisl.find(DAYS[f'{week_num+1}'])
-				]
-			else:
-				today_timetable = rasp_chisl[rasp_chisl.find(DAYS[f'{week_num}'])::]
-			bot.send_message(message.chat.id, today_timetable)
-		else:
-			if week_num != 4:
-				today_timetable = rasp_znam[
-					rasp_znam.find(DAYS[f'{week_num}']):rasp_znam.find(DAYS[f'{week_num+1}'])
-				]
-			else:
-				today_timetable = rasp_znam[rasp_znam.find(DAYS[f'{week_num}'])::]
-			bot.send_message(message.chat.id, today_timetable)
+		today_timetable(week_num)
+
+	elif message.text == 'Расписание на завтра':
+		week_num = time.weekday() + 1
+		today_timetable(week_num)
 			
 bot.polling()
