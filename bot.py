@@ -1,6 +1,8 @@
 import telebot
 import requests
 import datetime
+import pytz
+from dateutil.tz import tzutc
 
 bot = telebot.TeleBot('1358633577:AAFtPrWHwxmRtUZf0fjGSefAfug1qMbE_Pw')
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True)
@@ -87,8 +89,11 @@ rasp_znam = '''=== Знаменатель ===
 4. Системный анализ [Онлайн лек.]
 5. Биофизические основы живых систем [Онлайн лек.]
 '''
-time = datetime.datetime.now()
-start = datetime.datetime(2020, 9, 7)
+
+tzutc = tzutc()
+tz = pytz.timezone('Europe/Moscow')
+time = datetime.datetime.now(tz)
+start = datetime.datetime(2020, 9, 7, tzinfo=tzutc)
 
 def weekday_count():
 	delta = time - start
