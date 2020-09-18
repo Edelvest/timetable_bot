@@ -3,6 +3,7 @@ import requests
 import datetime
 import pytz
 from dateutil.tz import tzutc
+from dateutil.relativedelta import *
 
 bot = telebot.TeleBot('1358633577:AAFtPrWHwxmRtUZf0fjGSefAfug1qMbE_Pw')
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True)
@@ -17,6 +18,8 @@ DAYS = {
 	'2': 'Среда',
 	'3': 'Четверг',
 	'4': 'Пятница',
+	'5': 'Суббота',
+	'6': 'Воскресенье',
 }
 
 rasp_chisl = '''=== Числитель ===
@@ -52,6 +55,11 @@ rasp_chisl = '''=== Числитель ===
 4. [14:30-16:00] Системный анализ [Онлайн лек.]
 5. [16:10-17:40] Биофизические основы живых систем [Онлайн лек.]
 
+Суббота:
+Выходной
+
+Воскресенье:
+Выходной
 '''
 
 rasp_znam = '''=== Знаменатель ===
@@ -88,14 +96,19 @@ rasp_znam = '''=== Знаменатель ===
 3. [12:20/12:50-13:50/14:20] Вычислительная томография [Онлайн лек.]
 4. [14:30-16:00] Системный анализ [Онлайн лек.]
 5. [16:10-17:40] Биофизические основы живых систем [Онлайн лек.]
+
+Суббота:
+Выходной
+
+Воскресенье:
+Выходной
 '''
 
 tzutc = tzutc()
 tz = pytz.timezone('Europe/Moscow')
-time = datetime.datetime.now(tz)
-start = datetime.datetime(2020, 9, 7, tzinfo=tzutc)
 
-def weekday_count():
+def weekday_count(time):
+	start = datetime.datetime(2020, 9, 7, tzinfo=tzutc)
 	delta = time - start
 	count = delta.days // 7
 	return count
@@ -107,7 +120,8 @@ def start_message(message):
 
 @bot.message_handler(regexp="Расписание на текущую неделю")
 def current_week_timetable(message):
-	if weekday_count() % 2 == 0:
+	time = datetime.datetime.now(tz)
+	if weekday_count(time) % 2 == 0:
 		bot.send_message(message.chat.id, rasp_chisl, reply_markup=keyboard1)
 	else:
 		bot.send_message(message.chat.id, rasp_znam, reply_markup=keyboard1)
@@ -125,9 +139,10 @@ def znam_timetable(message):
 
 @bot.message_handler(regexp="Cегодня")
 def today_timetable(message):
+	time = datetime.datetime.now(tz)
 	week_num = time.weekday()
-	if weekday_count() % 2 == 0:
-		if week_num != 4:
+	if weekday_count(time) % 2 == 0:
+		if week_num != 6:
 			today_timetable = rasp_chisl[
 				rasp_chisl.find(DAYS[f'{week_num}']):rasp_chisl.find(DAYS[f'{week_num+1}'])
 			]
@@ -135,7 +150,7 @@ def today_timetable(message):
 			today_timetable = rasp_chisl[rasp_chisl.find(DAYS[f'{week_num}'])::]
 		bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
 	else:
-		if week_num != 4:
+		if week_num != 6:
 			today_timetable = rasp_znam[
 				rasp_znam.find(DAYS[f'{week_num}']):rasp_znam.find(DAYS[f'{week_num+1}'])
 			]
@@ -146,9 +161,10 @@ def today_timetable(message):
 
 @bot.message_handler(regexp="Завтра")
 def next_day_timetable(message):
-	week_num = time.weekday() + 1
-	if weekday_count() % 2 == 0:
-		if week_num != 4:
+	time = datetime.datetime.now(tz) + relativedelta(days=+1)
+	week_num = time.weekday()
+	if weekday_count(time) % 2 == 0:
+		if week_num != 6:
 			today_timetable = rasp_chisl[
 				rasp_chisl.find(DAYS[f'{week_num}']):rasp_chisl.find(DAYS[f'{week_num+1}'])
 			]
@@ -156,7 +172,7 @@ def next_day_timetable(message):
 			today_timetable = rasp_chisl[rasp_chisl.find(DAYS[f'{week_num}'])::]
 		bot.send_message(message.chat.id, today_timetable, reply_markup=keyboard1)
 	else:
-		if week_num != 4:
+		if week_num != 6:
 			today_timetable = rasp_znam[
 				rasp_znam.find(DAYS[f'{week_num}']):rasp_znam.find(DAYS[f'{week_num+1}'])
 			]
