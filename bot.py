@@ -108,7 +108,7 @@ tzutc = tzutc()
 tz = pytz.timezone('Europe/Moscow')
 
 def weekday_count(time):
-	start = datetime.datetime(2020, 9, 7, tzinfo=tzutc)
+	start = datetime.datetime(2020, 9, 6, tzinfo=tzutc)
 	delta = time - start
 	count = delta.days // 7
 	return count
