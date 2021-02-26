@@ -9,8 +9,8 @@ bot = telebot.TeleBot('1358633577:AAFtPrWHwxmRtUZf0fjGSefAfug1qMbE_Pw')
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True)
 keyboard1.row('Расписание на текущую неделю')
 keyboard1.row('Cегодня', 'Завтра')
-keyboard1.row('Расписание на числитель')
-keyboard1.row('Расписание на знаменатель')
+keyboard1.row('Числитель I', 'Числитель II')
+keyboard1.row('Знаменатель I', 'Знаментель II')
 
 DAYS = {
     '0': 'Понедельник',
@@ -210,16 +210,24 @@ def current_week_timetable(message):
         bot.send_message(message.chat.id, rasp_znam2, reply_markup=keyboard1)
 
 
-@bot.message_handler(regexp="Расписание на числитель")
-def chisl_timetable(message):
-    rasp = rasp_chisl1 + '\n' + rasp_chisl2
-    bot.send_message(message.chat.id, rasp, reply_markup=keyboard1)
+@bot.message_handler(regexp="Числитель I")
+def chisl1_timetable(message):
+    bot.send_message(message.chat.id, rasp_chisl1, reply_markup=keyboard1)
 
 
-@bot.message_handler(regexp="Расписание на знаменатель")
-def znam_timetable(message):
-    rasp = rasp_znam1 + '\n' + rasp_znam2
-    bot.send_message(message.chat.id, rasp, reply_markup=keyboard1)
+@bot.message_handler(regexp="Числитель II")
+def chisl2_timetable(message):
+    bot.send_message(message.chat.id, rasp_chisl2, reply_markup=keyboard1)
+
+
+@bot.message_handler(regexp="Знаменатель I")
+def znam1_timetable(message):
+    bot.send_message(message.chat.id, rasp_znam1, reply_markup=keyboard1)
+
+
+@bot.message_handler(regexp="Знаменатель II")
+def znam2_timetable(message):
+    bot.send_message(message.chat.id, rasp_znam2, reply_markup=keyboard1)
 
 
 @bot.message_handler(regexp="Cегодня")
