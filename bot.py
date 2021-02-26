@@ -10,7 +10,7 @@ keyboard1 = telebot.types.ReplyKeyboardMarkup(True)
 keyboard1.row('Расписание на текущую неделю')
 keyboard1.row('Cегодня', 'Завтра')
 keyboard1.row('Числитель I', 'Числитель II')
-keyboard1.row('Знаменатель I', 'Знаментель II')
+keyboard1.row('Знаменатель I', 'Знаменатель II')
 
 DAYS = {
     '0': 'Понедельник',
