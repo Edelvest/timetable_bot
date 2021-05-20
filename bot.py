@@ -5,7 +5,7 @@ import pytz
 from dateutil.tz import tzutc
 from dateutil.relativedelta import *
 
-bot = telebot.TeleBot('1358633577:AAFtPrWHwxmRtUZf0fjGSefAfug1qMbE_Pw')
+bot = telebot.TeleBot('1358633577:AAHjEaeUo4Bu39us4ISGOqn3vs1p4MSwTWg')
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True)
 keyboard1.row('Расписание на текущую неделю')
 keyboard1.row('Cегодня', 'Завтра')
