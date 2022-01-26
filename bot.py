@@ -201,6 +201,11 @@ def start_message(message):
     bot.send_message(message.chat.id, 'Если что не так, знаешь к кому стучаться', reply_markup=keyboard1)
 
 
+@bot.message_handler(commands=['send'])
+def start_message(message):
+    bot.send_message(272451122, 'Хуй', reply_markup=keyboard1)
+
+
 @bot.message_handler(regexp="Расписание на текущую неделю")
 def current_week_timetable(message):
     time = datetime.datetime.now(tz)
